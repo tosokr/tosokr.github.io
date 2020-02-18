@@ -20,7 +20,7 @@ steps:
       $(build.sourcesDirectory):/srv/jekyll
       $(build.binariesDirectory):/srv/jekyll/_site
     envVars: 'JEKYLL_ENV=production'
-    containerCommand: '/srv/jekyll/tools/azuredevopsbuild.sh'
+    containerCommand: '/srv/jekyll/tools/azuredevopsbuild.sh -d /srv/jekyll/_site'
     detached: false
 
 - task: PublishBuildArtifacts@1
