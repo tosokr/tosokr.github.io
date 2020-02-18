@@ -1,0 +1,1 @@
+[![Build Status](https://dev.azure.com/tosokr/MySite/_apis/build/status/tosokr.mysite?branchName=master)](https://dev.azure.com/tosokr/MySite/_build/latest?definitionId=16&branchName=master)
