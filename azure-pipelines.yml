@@ -8,17 +8,7 @@ trigger:
 
 pool:
   vmImage: 'ubuntu-latest'
-
 steps:
-- task: SonarCloudPrepare@1
-  inputs:
-    SonarCloud: 'tosokr-sonarcloud'
-    organization: 'tosokr'
-    scannerMode: 'CLI'
-    configMode: 'manual'
-    cliProjectKey: 'mysite-tosokr'
-    cliProjectName: 'mysite-tosokr'
-    cliSources: '.'
 - task: Docker@0
   displayName: 'Run Jekyll'
   inputs:
@@ -31,7 +21,6 @@ steps:
     envVars: 'JEKYLL_ENV=production'
     containerCommand: '/srv/jekyll/tools/azuredevopsbuild.sh -d /srv/jekyll/_site'
     detached: false
-- task: SonarCloudAnalyze@1
 - task: PublishBuildArtifacts@1
   inputs:
     pathtoPublish: '$(build.binariesDirectory)'
