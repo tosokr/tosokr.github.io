@@ -12,9 +12,11 @@ steps:
 - task: Docker@0
   displayName: 'Run Jekyll'
   inputs:
-    containerRegistryType: 'Container Registry'
+    containerregistrytype: 'Container Registry'
+    dockerRegistryConnection: 'DockerHub'
     action: 'Run an image'
-    imageName: 'jekyll/builder:latest'
+    imageName: 'tosokr/jekyllbuild'
+    qualifyImageName: false
     volumes: |
       $(build.sourcesDirectory):/srv/jekyll
       $(build.binariesDirectory):/srv/jekyll/_site
