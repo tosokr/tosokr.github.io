@@ -95,16 +95,19 @@ analytics:
 author:
   name             : "Aleksandar Stefanov"
   avatar           : "/assets/img/profile/toso.png"
-  bio              : "Cloud Architect @Devoteam"
+  bio              : "Cloud Solutions Architect @Devoteam. Expertise in Azure & Azure DevOps solutions"
   location         : "Netherlands"
   email            : "tosokr@gmail.com"
   links:
-    - label: "Email"
-      icon: "fas fa-fw fa-envelope-square"
-      url: mailto:tosokr@gmail.com
+  #  - label: "Email"
+  #    icon: "fas fa-fw fa-envelope-square"
+  #    url: mailto:tosokr@gmail.com
   #  - label: "Website"
   #    icon: "fas fa-fw fa-link"
   #    url: "https://tosokr.github.io"
+    - label: "Linkedin"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://www.linkedin.com/in/aleksandarstefanov/"
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
       url: "https://twitter.com/tosokr"
@@ -121,6 +124,9 @@ author:
 # Site Footer
 footer:
   links:
+    - label: "Linkedin"
+      icon: "fab fa-fw fa-linkedin"
+      url: "https://www.linkedin.com/in/aleksandarstefanov/"
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
       url: "https://twitter.com/tosokr"
