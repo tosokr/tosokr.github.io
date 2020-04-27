@@ -6,6 +6,7 @@ categories: [API Management]
 tags: [APIM]
 header:
  teaser: "/assets/img/posts/teasers/apiManagement.png"
+permalink: /apim/client-certificates-authentication/
 excerpt: API Management gateway can enforce TLS client authentication, and it can inspect the certificate contained within the client request and check for properties like Certificate Authority (CA),  Thumbprint, Subject or Expiration Date. These properties are not mutually exclusive, and they can be mixed together to form our policy requirements. 
 ---
 ### Options for protecting backend APIs with Azure API Management (APIM)
