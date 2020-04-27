@@ -6,6 +6,7 @@ categories: [ARM Templates]
 tags: [ARM]
 header:
  teaser: "/assets/img/posts/teasers/resourceGroup.png"
+permalink: /arm templates/arm-nightmare-reference/
 ---
 Last week I worked on an ARM template for a deployment that, among other resources, included Web Apps and SQL databases. One of the tasks was to allow the connection from the possible outbound IP addresses of the Web App into the SQL server. And there, my problem started, because I'm not very proficient in creating advanced ARM templates. In the paragraphs below, I will give a brief overview of the ARM templates, what was my problem, and how did I solve it.
 
