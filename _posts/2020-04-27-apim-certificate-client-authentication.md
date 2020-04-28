@@ -24,17 +24,17 @@ Certificates can provide TLS client authentication to the API gateway. We can co
 
 #### Create an API in Azure API Management
 We will publish our backend Todo APIs through the APIM because our goal is to protect the access to the APIs by requiring client certificates without making any changes to the backend.
-1.Open the API Management service, and under API Management select APIs
+1. Open the API Management service, and under API Management select APIs
 
-2.In Add a new API window, select OpenAPI
+2. In Add a new API window, select OpenAPI
 
-3.Fill in the details like in the picture (if you are hosting the Todo API, change the url for the OpenAPI specification) an click Create
+3. Fill in the details like in the picture (if you are hosting the Todo API, change the url for the OpenAPI specification) an click Create
  ![Desktop View]({{ "/assets/img/posts/aad/clientCertificatesAddAPI.png" | relative_url }}) 
 
-4.In the Settings tab of the Todo API Client Credentials Flow, enter the Web Service URL (our backend Todo API), and disable subscription requirement (just for simplicity of this demo deployment)
+4. In the Settings tab of the Todo API Client Credentials Flow, enter the Web Service URL (our backend Todo API), and disable subscription requirement (just for simplicity of this demo deployment)
  ![Desktop View]({{ "/assets/img/posts/aad/setAPISettingsNoAuth.png" | relative_url }})
 
-5.As stated in Microsoft documentation: 
+5. As stated in Microsoft documentation: 
 >To receive and verify client certificates over HTTP/2 in the Developer, Basic, Standard, or Premium tiers you must turn on the "Negotiate client certificate" setting on the "Custom domains" blade.
 >To receive and verify client certificates in the Consumption tier you must turn on the "Request client certificate" setting on the "Custom domains" blade as shown below.
 
@@ -44,40 +44,38 @@ Because we are using a Consumption tier, we need to enable the client certificat
 #### Configure the client daemon application
 Our application is a simple .NET Core 3.1 console application that reads its configuration from the appsetings.json file and sent a GET request to the /api/TodoList endpoint and lists the received items.
 
-1.Clone the repository
-```shell
-git clone https://github.com/tosokr/client-daemon-todo-api-cert.git
-```
+1. Clone the repository
+   ```shell
+   git clone https://github.com/tosokr/client-daemon-todo-api-cert.git
+   ```
+2. Generate new client certificates with the generateCertificates.sh script or use the myClientCertificate.pfx certificate  from the repository
+3. Edit the appsettings.json file, add your APIM endpoint for the Todo API and change the certificate path and password if you choose to generate a new one (for production deployments, store the certificate password somewhere else!) 
+    ```json
+    {
+      "TodoListBaseAddress": "https://{your_apim_instance_name}/todo-client-certificates",
+      "CertificateFileName": "myClientCertificate.pfx",
+      "CertificatePassword": "asd@3FSBQ!3dFAs#o"
+    }
+    ```
 
-2.Generate new client certificates with the generateCertificates.sh script or use the myClientCertificate.pfx certificate  from the repository
+4. In the root folder of the application execute
+   ```shell
+   dotnet run
+   ```
+   If the certificate authentication is successful, you will receive the following output
+   ```shell
+   Web Api result:
 
-3.Edit the appsettings.json file, add your APIM endpoint for the Todo API and change the certificate path and password if you choose to generate a new one (for production deployments, store the certificate password somewhere else!) 
-```json
-{
-	"TodoListBaseAddress": "https://{your_apim_instance_name}/todo-client-certificates",
-	"CertificateFileName": "myClientCertificate.pfx",
-	"CertificatePassword": "asd@3FSBQ!3dFAs#o"
-}
-``` 
+   id = 1
+   title = Pick up groceries
+   owner = Mr.Brown
 
-4.In the root folder of the application execute
-```shell
-dotnet run
-```
-If the certificate authentication is successful, you will receive the following output
-```shell
-Web Api result:
+   id = 2
+   title = Finish invoice report
+   owner = Mr.Yellow
 
-id = 1
-title = Pick up groceries
-owner = Mr.Brown
-
-id = 2
-title = Finish invoice report
-owner = Mr.Yellow
-
-Press any key to exit
-```
+   Press any key to exit
+   ```
 
 #### Validate the client certificate
 From the authorization point of view, it is not just enough to request a certificate, but we need to validate it and approve or reject access based on specific criteria. The validation is done in the inbound policy section of the published API. In the policy expressions, we access the provided client certificate using  context.Request.Certificate, which is essentially a [System.Security.Cryptography.X509Certificates.X509Certificate2]( https://docs.microsoft.com/en-us/dotnet/api/system.security.cryptography.x509certificates.x509certificate2?view=netframework-4.8) object.
@@ -87,54 +85,54 @@ To be able to validate a self-signed certificate, the APIM needs the root certif
 Click on the Todo API Client Certificates, select All operations, and open the policy code editor. 
 
 1. Verify the Issuer and the Subject Name of the certificate:
-```xml
-<inbound>
-  <base />
-  <choose>
-      <when condition="@(context.Request.Certificate == null 
-      || context.Request.Certificate.Issuer != "CN=client-daemon.mycustomdomain.com, OU=Azure, O=tosokr.github.io, L=Amsterdam, S=North Holland, C=NL" 
-      || context.Request.Certificate.SubjectName.Name != "CN=*.mycustomdomain.com")">
-        <return-response>
-            <set-status code="403" reason="Invalid client certificate" />
-        </return-response>
-      </when>
-  </choose>
-</inbound>
-```
+    ```xml
+    <inbound>
+      <base />
+      <choose>
+          <when condition="@(context.Request.Certificate == null 
+          || context.Request.Certificate.Issuer != "CN=client-daemon.mycustomdomain.com, OU=Azure, O=tosokr.github.io, L=Amsterdam, S=North Holland, C=NL" 
+          || context.Request.Certificate.SubjectName.Name != "CN=*.mycustomdomain.com")">
+            <return-response>
+                <set-status code="403" reason="Invalid client certificate" />
+            </return-response>
+          </when>
+      </choose>
+    </inbound>
+    ```
 2. Verify the thumbrint of the certificate and the validity date
-```xml
-<inbound>
-  <base />
-  <choose>
-      <when condition="@(context.Request.Certificate == null 
-      || context.Request.Certificate.Thumbprint != "456AAB1833DF842152605DF6C2B1DB2BBA29380D"
-      || context.Request.Certificate.NotAfter<DateTime.Now)">
-          <return-response>
-              <set-status code="403" reason="Invalid client certificate" />
-          </return-response>
-      </when>
-  </choose>
-</inbound>
-```
+    ```xml
+    <inbound>
+      <base />
+      <choose>
+          <when condition="@(context.Request.Certificate == null 
+          || context.Request.Certificate.Thumbprint != "456AAB1833DF842152605DF6C2B1DB2BBA29380D"
+          || context.Request.Certificate.NotAfter<DateTime.Now)">
+              <return-response>
+                  <set-status code="403" reason="Invalid client certificate" />
+              </return-response>
+          </when>
+      </choose>
+    </inbound>
+    ```
 3. Verify the thumbrint of the certificate against uploaded certificates to APIM
 
-To use this feature, we need to upload our .pfx certificate to APIM
- ![Desktop View]({{ "/assets/img/posts/aad/clientCertificatesUploadCertificate.png" | relative_url }})
-and apply the following policy
-```xml
-<inbound>
-  <base />
-  <choose>
-      <when condition="@(context.Request.Certificate == null 
-      || !context.Deployment.Certificates.Any(c => c.Value.Thumbprint == context.Request.Certificate.Thumbprint)
-      || context.Request.Certificate.NotAfter<DateTime.Now)">
-          <return-response>
-              <set-status code="403" reason="Invalid client certificate" />
-          </return-response>
-      </when>
-  </choose>
-</inbound>
-```
+    To use this feature, we need to upload our .pfx certificate to APIM
+    ![Desktop View]({{ "/assets/img/posts/aad/clientCertificatesUploadCertificate.png" | relative_url }})
+    and apply the following policy
+    ```xml
+    <inbound>
+      <base />
+      <choose>
+          <when condition="@(context.Request.Certificate == null 
+          || !context.Deployment.Certificates.Any(c => c.Value.Thumbprint == context.Request.Certificate.Thumbprint)
+          || context.Request.Certificate.NotAfter<DateTime.Now)">
+              <return-response>
+                  <set-status code="403" reason="Invalid client certificate" />
+              </return-response>
+          </when>
+      </choose>
+    </inbound>
+    ```
 
 #### Summary
 API Management gateway can enforce TLS client authentication, and it can inspect the certificate contained within the client request and check for properties like:
