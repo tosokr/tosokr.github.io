@@ -16,12 +16,12 @@ minimal_mistakes_skin    : "air" # "air", "aqua", "contrast", "dark", "dirt", "n
 
 # Site Settings
 locale                   : "en-US"
-title                    : "tosokr.github.io"
+title                    : "AzToso.com"
 title_separator          : "-"
-subtitle                 : #"The Cloud is a Journey, Not a Destination"
+subtitle                 : "Every day it's a cloudy day"
 name                     : "Aleksandar Stefanov"
 description              : "Azure experience from the field translated into blog posts"
-url                      : https://tosokr.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
+url                      : https://aztoso.com # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : tosokr/minimal-mistakes # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 teaser                   : "/assets/images/Azure.jpg"
@@ -95,7 +95,7 @@ analytics:
 author:
   name             : "Aleksandar Stefanov"
   avatar           : "/assets/img/profile/toso.png"
-  bio              : "Cloud Solutions Architect @Devoteam. Expertise in Azure & Azure DevOps solutions"
+  bio              : "Cloud Solutions Architect with expertise in Azure & Azure DevOps solutions"
   location         : "Netherlands"
   email            : "tosokr@gmail.com"
   links:
