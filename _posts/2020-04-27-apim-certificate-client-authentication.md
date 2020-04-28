@@ -24,13 +24,13 @@ Certificates can provide TLS client authentication to the API gateway. We can co
 
 #### Create an API in Azure API Management
 We will publish our backend Todo APIs through the APIM because our goal is to protect the access to the APIs by requiring client certificates without making any changes to the backend.
-1.Open the API Management service, and under API Management select APIs
-2.In Add a new API window, select OpenAPI
-3.Fill in the details like in the picture (if you are hosting the Todo API, change the url for the OpenAPI specification) an click Create
+1. Open the API Management service, and under API Management select APIs
+2. In Add a new API window, select OpenAPI
+3. Fill in the details like in the picture (if you are hosting the Todo API, change the url for the OpenAPI specification) an click Create
  ![Desktop View]({{ "/assets/img/posts/aad/clientCertificatesAddAPI.png" | relative_url }}) 
-4.In the Settings tab of the Todo API Client Credentials Flow, enter the Web Service URL (our backend Todo API), and disable subscription requirement (just for simplicity of this demo deployment)
+4. In the Settings tab of the Todo API Client Credentials Flow, enter the Web Service URL (our backend Todo API), and disable subscription requirement (just for simplicity of this demo deployment)
  ![Desktop View]({{ "/assets/img/posts/aad/setAPISettingsNoAuth.png" | relative_url }})
-5.As stated in Microsoft documentation: 
+5. As stated in Microsoft documentation: 
 >To receive and verify client certificates over HTTP/2 in the Developer, Basic, Standard, or Premium tiers you must turn on the "Negotiate client certificate" setting on the "Custom domains" blade.
 >To receive and verify client certificates in the Consumption tier you must turn on the "Request client certificate" setting on the "Custom domains" blade as shown below.
 
@@ -39,12 +39,12 @@ Because we are using a Consumption tier, we need to enable the client certificat
 
 #### Configure the client daemon application
 Our application is a simple .NET Core 3.1 console application that reads its configuration from the appsetings.json file and sent a GET request to the /api/TodoList endpoint and lists the received items.
-1.Clone the repository
+1. Clone the repository
 ```shell
 git clone https://github.com/tosokr/client-daemon-todo-api-cert.git
 ```
-2.Generate new client certificates with the generateCertificates.sh script or use the myClientCertificate.pfx certificate  from the repository
-3.Edit the appsettings.json file, add your APIM endpoint for the Todo API and change the certificate path and password if you choose to generate a new one (for production deployments, store the certificate password somewhere else!) 
+2. Generate new client certificates with the generateCertificates.sh script or use the myClientCertificate.pfx certificate  from the repository
+3. Edit the appsettings.json file, add your APIM endpoint for the Todo API and change the certificate path and password if you choose to generate a new one (for production deployments, store the certificate password somewhere else!) 
 ```json
 {
 	"TodoListBaseAddress": "https://{your_apim_instance_name}/todo-client-certificates",
@@ -52,7 +52,7 @@ git clone https://github.com/tosokr/client-daemon-todo-api-cert.git
 	"CertificatePassword": "asd@3FSBQ!3dFAs#o"
 }
 ``` 
-4.In the root folder of the application execute
+4. In the root folder of the application execute
 ```shell
 dotnet run
 ```
@@ -78,7 +78,7 @@ To be able to validate a self-signed certificate, the APIM needs the root certif
 
 Click on the Todo API Client Certificates, select All operations, and open the policy code editor. 
 
-1.Verify the Issuer and the Subject Name of the certificate:
+1. Verify the Issuer and the Subject Name of the certificate:
 ```xml
 <inbound>
   <base />
@@ -93,7 +93,7 @@ Click on the Todo API Client Certificates, select All operations, and open the p
   </choose>
 </inbound>
 ```
-2.Verify the thumbrint of the certificate and the validity date
+2. Verify the thumbrint of the certificate and the validity date
 ```xml
 <inbound>
   <base />
@@ -108,7 +108,7 @@ Click on the Todo API Client Certificates, select All operations, and open the p
   </choose>
 </inbound>
 ```
-3.Verify the thumbrint of the certificate against uploaded certificates to APIM
+3. Verify the thumbrint of the certificate against uploaded certificates to APIM
 
 To use this feature, we need to upload our .pfx certificate to APIM
  ![Desktop View]({{ "/assets/img/posts/aad/clientCertificatesUploadCertificate.png" | relative_url }})
