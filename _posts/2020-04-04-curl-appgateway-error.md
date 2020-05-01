@@ -6,6 +6,7 @@ categories: [Application Gateway]
 tags: [Application Gateway,Certificates]
 header:
  teaser: "/assets/img/posts/teasers/appGateway.png"
+permalink: /posts/curl-appgateway-error/
 ---
 If you get the following error when you try to open a webpage using Linux command-line tool curl:
 >curl: (60) SSL certificate problem: unable to get local issuer certificate

@@ -6,6 +6,7 @@ categories: [Azure Kubernetes Service, Azure Container Instances, Application Ga
 tags: [AKS,ACI,Application Gateway]
 header:
  teaser: "/assets/img/posts/teasers/aks.png"
+permalink: /posts/aks-virtualnode-appgateway/
 ---
 Azure Kubernetes Service (AKS) is a managed Kubernetes cluster offering in Azure, meaning Microsoft is taking care of managing the Kubernetes masters. AKS is "free" – you only need to pay for the nodes (virtual machines). Because AKS is free, there is no coverage by guaranteed (financially-backed) SLA. Still, Microsoft is stating that "We will strive to attain at least 99.5% availability for the Kubernetes API server". For the Kubernetes nodes virtual machines, the SLA depends on the type of deployment: 99.99% for Availability Zones, 99.95% for Availability Set, and 99.9% for a single VM using Premium SSD or Ultra Disk.
 
