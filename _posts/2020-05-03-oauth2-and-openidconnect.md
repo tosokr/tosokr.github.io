@@ -7,7 +7,7 @@ tags: [OpenID,OAuth2]
 header:
  teaser: "/assets/img/posts/teasers/auth.png"
 permalink: /security/oauth2-and-openidconnect/
-excerpt: OAuth 2.0 is the industry-standard protocol for authorization. OAuth 2.0 focuses on client developer simplicity while providing specific authorization flows for web applications, desktop applications, mobile phones, and living room devices. OpenID Connect is a simple identity layer built on top of the OAuth 2.0 protocol.
+excerpt: OAuth 2.0 is the industry-standard protocol for authorization. OAuth 2.0 focuses on client developer simplicity while providing specific authorization flows for web applications, desktop applications, mobile phones, and living room devices. OpenID Connect is a simple identity layer built on top of the OAuth 2.0 protocol. It includes information about the end-user in the form of an id_token that verifies the identity of the user and provides basic profile information about the user.
 ---
 ### What is OAuth 2.0 and OpenID Connect?
 >OAuth 2.0 is the industry-standard protocol for authorization. OAuth 2.0 focuses on client developer simplicity while providing specific authorization flows for web applications, desktop applications, mobile phones, and living room devices. - [oauth.net](https://oauth.net/2/)
