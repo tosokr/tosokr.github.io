@@ -6,6 +6,7 @@ categories: [API Management]
 tags: [APIMPolicy]
 header:
  teaser: "/assets/img/posts/teasers/appConfiguration.png"
+permalink: /posts/apim-maximum-post-size/
 ---
 If there is a need for a file upload support using API POST request, and there is a maximum file size set the backend, the best place to validate the file size is at the APIM.
 The policy definition bellow, checks the request method and the size of the request. If the HTTP method is POST and content size is above 50MB, the API will immediately return status code 413 “Payload Too Large” to the caller. Otherwise, it will continue processing other policy definitions and eventually hit the backend. 
