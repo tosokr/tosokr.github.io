@@ -6,6 +6,7 @@ categories: [Virtual Machines]
 tags: [VMs,Powershell,Availability Zones]
 header:
  teaser: "/assets/img/posts/teasers/vm.png"
+permalink: /posts/migrate-virtual-machine-into-availability-zone/
 ---
 
 Availability Zones is a high-availability offering that protects you from datacenter failures. Think of them as separate datacenter inside one Azure location. For example, West Europe is one location (Amsterdam, Netherlands), but inside that location, there are several datacenters. In your subscription, you can see Availability Zones labeled as 1, 2, and 3. Those numbers are just logical representations of the physical datacenters, meaning that, for example, Availability Zone 1 in West Europe for my subscription can point to different physical datacenter compared to the Availability Zone 1 in West Europe for your subscription.

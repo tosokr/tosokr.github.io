@@ -6,6 +6,7 @@ categories: [Certificates]
 tags: [Certificates]
 header:
  teaser: "/assets/img/posts/teasers/certificates.png"
+permalink: /posts/generate-self-signed-certificates/
 ---
 In this post, I’m explaining how to generate a wildcard certificate for the custom domain with openssl, using a custom Certificate Authority. You can find the script in my Github repository [https://github.com/tosokr/Azure/blob/master/certificates/generateCertificates.sh](https://github.com/tosokr/Azure/blob/master/certificates/generateCertificates.sh)
 

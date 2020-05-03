@@ -6,6 +6,7 @@ categories: [API Management]
 tags: [APIMPolicy,Powershell,Authentication]
 header:
  teaser: "/assets/img/posts/teasers/apiManagement.png"
+permalink: /posts/apim-basic-auth-keyvault/
 ---
 Policies are a powerful capability of the Azure API Management (APIM) that allows the publisher to change the behavior of the API through configuration. APIM policy is a collection of statements executed sequentially on the request or response of an API. We can define our policy statement in four configuration sections: inbound, backend, outbound, and on-error:
 ```xml

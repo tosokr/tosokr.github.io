@@ -6,6 +6,7 @@ categories: [Azure DevOps]
 tags: [Azure DevOps,Jekyll]
 header:
  teaser: "/assets/img/posts/teasers/azureDevOps.png"
+permalink: /posts/azuredevops-jekyll-github/
 ---
 >"Jekyll is a static site generator. You give it text written in your favorite markup language and it uses layouts to create a static website. You can tweak how you want the site URLs to look, what data gets displayed on the site, and more."
 
