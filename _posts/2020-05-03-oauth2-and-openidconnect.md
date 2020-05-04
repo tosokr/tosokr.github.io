@@ -53,7 +53,7 @@ OAuth 2.0 authorization code grant uses two separate endpoints. The authorizatio
 
 The authorization code flow is illustrated in the picture above, for the Open ID Connect flow. 
 
-### OAuth 2.0 client cridentials flow 
+### OAuth 2.0 client credentials flow 
 OAuth 2.0 Client Credentials Grant Flow permits a web service (serving the role of a confidential client) to use its credentials to authenticate when calling another web service instead of impersonating a user. In this scenario, the client is typically a middle-tier web service, a daemon service, or a website. For a higher level of assurance, Azure AD also allows the calling service to use a certificate (instead of a shared secret) as a credential.
 
 The picture illustrates how the client credentials grant flow works in Azure AD.
