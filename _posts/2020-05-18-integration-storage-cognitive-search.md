@@ -10,7 +10,7 @@ permalink: /vm/integration-storage-logicapp-cognitive/
 excerpt: Azure Logic Apps is an event-based serverless offering that enables connecting and integrating disparate systems without writing a single line of code. Follow this post to learn how to make use of Artificial Intelligence to add tags to the images you upload to your storage containers and enable indexed search based on those tags. 
 
 ---
-### Introduction
+### Scenario
 We will deploy a solution that will enable each image uploaded to the storage account to have auto-generated, indexed, and searchable image tags based on the content of the image.
 The proposed high-level solution architecture looks like this:
 
