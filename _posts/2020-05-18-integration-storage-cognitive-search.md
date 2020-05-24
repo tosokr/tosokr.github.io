@@ -8,10 +8,9 @@ header:
  teaser: "/assets/img/posts/teasers/logicApps.png"
 permalink: /vm/integration-storage-logicapp-cognitive/
 excerpt: Azure Logic Apps is an event-based serverless offering that enables connecting and integrating disparate systems without writing a single line of code. Follow this post to learn how to make use of Artificial Intelligence to add tags to the images you upload to your storage containers and enable indexed search based on those tags. 
-
 ---
 ### Scenario
-We will deploy a solution that will enable each image uploaded to the storage account to have auto-generated, indexed, and searchable image tags based on the content of the image.
+The requirement for this scenario is: each image uploaded to the storage account needs to have auto-generated, indexed, and searchable image tags based on the content of the image.
 The proposed high-level solution architecture looks like this:
 
 ![Desktop View]({{ "/assets/img/posts/integration/architecture.jpg" | relative_url }})
@@ -38,7 +37,7 @@ In the Azure Portal, search for Logic App and click Create
 
 ![Desktop View]({{ "/assets/img/posts/integration/createLogicApp.png" | relative_url }})
 
-You can find the code for the LogicApp in my GitHub [repo](https://github.com/tosokr/Azure/blob/master/logicApps/storageComputerVisionTags.json). Paste it in your logic app and replace the YOUR_SUBSCRIPTION_ID placeholder with the id of your subscription. I will try to guide you through the steps of creating the Logic App for this purpose:
+You can find the ARM template for the LogicApp in my GitHub [repo](https://github.com/tosokr/Azure/blob/master/logicApps/storageComputerVisionTags.json). I will try to guide you through the steps of creating the Logic App for this purpose:
 
 1. Start with a Blank Logic App. 
 2. For a trigger, choose "When a blob is created or modified (properties only)", a part from the Azure Blob Storage integration connector. 
