@@ -33,17 +33,16 @@ In the Portal, search for Computer Vision and click Create. Select the free pric
 
 ### Logic App
 To be able to integrate the storage account and the computer vision service, we will use Logic App. It is an event-driven serverless offering with built-in connectors for integrating disparate systems. The built-in connectors are listed [here](https://docs.microsoft.com/en-us/connectors/connector-reference/connector-reference-logicapps-connectors).
-In the Azure Portal, search for Logic App and click Create
-
-![Desktop View]({{ "/assets/img/posts/integration/createLogicApp.png" | relative_url }})
-
 You can find the ARM template for the LogicApp in my GitHub [repo](https://github.com/tosokr/Azure/blob/master/logicApps/storageComputerVisionTags.json). I will try to guide you through the steps of creating the Logic App for this purpose:
 
-1. Start with a Blank Logic App. 
-2. For a trigger, choose "When a blob is created or modified (properties only)", a part from the Azure Blob Storage integration connector. 
+1. In the Azure Portal, search for Logic App and click Create
 
-![Desktop View]({{ "/assets/img/posts/integration/logicAppBlobTrigger.png" | relative_url }})
-3. Select the images and set the number of blobs and the interval for checking of new changes. Create a SAS token for the blob, with read & write permissions. 
+    ![Desktop View]({{ "/assets/img/posts/integration/createLogicApp.png" | relative_url }})
+2. Start with a Blank Logic App. 
+3. For a trigger, choose "When a blob is created or modified (properties only)", a part from the Azure Blob Storage integration connector. 
+
+    ![Desktop View]({{ "/assets/img/posts/integration/logicAppBlobTrigger.png" | relative_url }})
+4. Select the images and set the number of blobs and the interval for checking of new changes. Create a SAS token for the blob, with read & write permissions. 
 
     ![Desktop View]({{ "/assets/img/posts/integration/logicAppBlobTriggerSettingsSAStoken.png" | relative_url }})
 5. Initialize the tags array variable to store all the discovered tags. Get the existing blob metadata (not part from the initial trigger)
