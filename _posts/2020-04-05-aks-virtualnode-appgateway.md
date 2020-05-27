@@ -4,6 +4,7 @@ date: 2020-04-06 22:00:00 +0000
 description: How to deploy Azure Kubernetes Service with virtual nodes and Application Gateway ingress controller
 categories: [Azure Kubernetes Service, Azure Container Instances, Application Gateway]
 tags: [AKS,ACI,Application Gateway]
+toc: false 
 header:
  teaser: "/assets/img/posts/teasers/aks.png"
 permalink: /posts/aks-virtualnode-appgateway/
