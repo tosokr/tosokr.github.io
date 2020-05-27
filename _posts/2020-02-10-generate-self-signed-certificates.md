@@ -4,6 +4,7 @@ date: 2020-02-14 21:00:00 +0000
 description: How to generate self signed certificates including Root CA with openssl
 categories: [Certificates]
 tags: [Certificates]
+toc: false 
 header:
  teaser: "/assets/img/posts/teasers/certificates.png"
 permalink: /posts/generate-self-signed-certificates/

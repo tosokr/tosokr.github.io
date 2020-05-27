@@ -4,6 +4,7 @@ date: 2020-02-27 19:00:00 +0000
 description: Azure API Management policy client basic authentication howto
 categories: [API Management]
 tags: [APIMPolicy,Powershell,Authentication]
+toc: false 
 header:
  teaser: "/assets/img/posts/teasers/apiManagement.png"
 permalink: /posts/apim-basic-auth-keyvault/

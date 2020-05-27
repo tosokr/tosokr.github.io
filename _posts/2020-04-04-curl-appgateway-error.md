@@ -4,6 +4,7 @@ date: 2020-04-04 19:00:00 +0000
 description: curl (60) SSL certificate problem unable to get local issuer certificate
 categories: [Application Gateway]
 tags: [Application Gateway,Certificates]
+toc: false 
 header:
  teaser: "/assets/img/posts/teasers/appGateway.png"
 permalink: /posts/curl-appgateway-error/

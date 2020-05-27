@@ -4,6 +4,7 @@ date: 2020-03-25 11:00:00 +0000
 description: How to access Key Vault reference stored in App Configuration from .NET Framework console application
 categories: [Azure DevOps]
 tags: [Azure DevOps,Jekyll]
+toc: false 
 header:
  teaser: "/assets/img/posts/teasers/azureDevOps.png"
 permalink: /posts/azuredevops-jekyll-github/

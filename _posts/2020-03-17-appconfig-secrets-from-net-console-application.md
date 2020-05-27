@@ -4,6 +4,7 @@ date: 2020-03-17 07:00:00 +0000
 description: How to access Key Vault reference stored in App Configuration from .NET Framework console application
 categories: [App Configuration,Key Vault]
 tags: [AppConfiguration,KeyVault]
+toc: false 
 header:
  teaser: "/assets/img/posts/teasers/appConfiguration.png"
 permalink: /posts/appconfig-secrets-from-net-console-application/

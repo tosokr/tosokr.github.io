@@ -4,6 +4,7 @@ date: 2020-02-28 13:00:00 +0000
 description: Azure API Management maximum size requests post
 categories: [API Management]
 tags: [APIMPolicy]
+toc: false 
 header:
  teaser: "/assets/img/posts/teasers/appConfiguration.png"
 permalink: /posts/apim-maximum-post-size/
