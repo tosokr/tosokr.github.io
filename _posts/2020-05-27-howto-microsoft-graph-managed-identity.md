@@ -19,7 +19,7 @@ When accessing the Microsoft Graph, the managed identity needs to have proper pe
 
 ![Desktop View]({{ "/assets/img/posts/managedIdentity/managedIdentityPermissions.png" | relative_url }})
 
-The Powershell script below will add the requested Microsoft Graph API permissions to the Managed Identity object 
+The Powershell script below will add the requested Microsoft Graph API permissions to the Managed Identity object: 
 
 ```powershell
 # Your tenant id (in Azure Portal, under Azure Active Directory -> Overview )
@@ -44,5 +44,5 @@ New-AzureAdServiceAppRoleAssignment -ObjectId $MSI.ObjectId -PrincipalId $MSI.Ob
 -ResourceId $GraphServicePrincipal.ObjectId -Id $AppRole.Id
 ```
 
-After executing the script, in the portal, the requested API permissions are assigned to the Managed Identity 
+After executing the script, in the portal, the requested API permissions are assigned to the Managed Identity: 
 ![Desktop View]({{ "/assets/img/posts/managedIdentity/managedIdentityPermissionsAdded.png" | relative_url }})
