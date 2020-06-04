@@ -27,8 +27,9 @@ The script workflow:
 5.	Create a new VM 
 6.	(If you need it) Create an SQL VM object (this install the SQL IaaS agent into the VM)
 
-After you verify that everything is working, delete the old disks and the snapshots. Otherwise, you will end up paying to Microsoft for the provisioned space (if you are using SSD disks, this can be a significant sum of money).
+Note: After you verify that everything is working, delete the old disks and the snapshots. Otherwise, you will end up paying to Microsoft for the provisioned space (if you are using SSD disks, this can be a significant sum of money).
 
+You can download the script from my Github repository [here](https://github.com/tosokr/Azure/blob/master/VirtualMachines/changeAvailabilityZoneOfVM.ps1)
 ```powershell
 # Set variables
 $subscriptionId="" #Set to your subscription id where the VM is created
