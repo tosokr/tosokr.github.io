@@ -110,7 +110,7 @@ New-AzApiManagementProperty -Context $(New-AzApiManagementContext -ResourceGroup
     <when condition="@(!context.Variables.ContainsKey("keyvaultsecretResponse"))">
         <send-request mode="new" response-variable-name="keyvaultsecret" timeout="20" ignore-error="false">
             <set-url>@{
-                return "{{KeyVaultURL}}" +"secrets/" + context.Request.Headers.GetValueOrDefault("Authorization").AsBasic().UserId + "/?api-version=7.0";
+                return "{{ "{{KeyVaultURL"}}}}" +"secrets/" + context.Request.Headers.GetValueOrDefault("Authorization").AsBasic().UserId + "/?api-version=7.0";
             }</set-url>
             <set-method>GET</set-method>
             <authentication-managed-identity resource="https://vault.azure.net" />
