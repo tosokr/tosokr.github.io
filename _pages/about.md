@@ -9,6 +9,6 @@ With my strong technical skills as well as excellent interpersonal skills, I can
 
 I hold B.Sc in Computer Science, Azure Solutions Architect Expert, and Azure DevOps Solutions certifications from Microsoft and Professional Cloud Architect certification from Google.
 
-Currently, I work as a Cloud Solutions Architect at Devoteam Netherlands. Opinions on this site are my own.
+Currently, I work as an Expert Cloud Engineer at TomTom. Opinions on this site are my own.
 
 To find out more details about my work experience, please visit my [Linkedin](https://www.linkedin.com/in/aleksandarstefanov/) profile.
