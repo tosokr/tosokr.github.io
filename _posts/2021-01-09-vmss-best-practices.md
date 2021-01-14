@@ -12,7 +12,7 @@ excerpt: Virtual Machine Scale Sets (VMSS) enable you to create and manage a gro
 ---
 Virtual Machine Scale Sets (VMSS) enable you to create and manage a group of load-balanced virtual machines easily. VMSS is an IaaS service usually used in the lift-and-shift scenarios or when hosting an application inside VM is the most optimal solution from a performance or Total Cost of Ownership perspective.
 
-Note: The best practices described here doesn't apply to Azure Kubernetes Service (AKS). 
+Note: The best practices described here doesn't apply to Azure Kubernetes Service (AKS) node pools. 
 
 - Use [zone redundant VMSS](https://docs.microsoft.com/en-us/azure/virtual-machine-scale-sets/virtual-machine-scale-sets-use-availability-zones), to automatically spread virtual machines across availability zones. With such deployment, you will get an SLA of 99.99% for your VMs. 
     
