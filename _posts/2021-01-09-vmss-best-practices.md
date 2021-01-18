@@ -18,7 +18,7 @@ Note: The best practices described here doesn't apply to Azure Kubernetes Servic
     
     Note: Please ensure that all the components in your stack are redundant and consider their SLA to calculate your workload's overall SLA.
 - Use the [Max spreading algorithm](https://docs.microsoft.com/en-us/azure/virtual-machine-scale-sets/virtual-machine-scale-sets-use-availability-zones#availability-considerations) to spread VMs across as many fault domains as possible within each zone.
-- If not sure, always use [SSD disks](https://docs.microsoft.com/en-us/azure/virtual-machines/disks-types) for production workloads. For disk-intensive workloads, use Premium SSD or Ultra Disks.
+- If you scale down to one instance, the [SLA](https://azure.microsoft.com/en-gb/support/legal/sla/virtual-machines/v1_9/) for a single VM applies. If you use HDD disks, the SLA is only 95%. Upgrade to Standard SSD will give you 99.5% SLA.
 - When supported, consider using [Accelerated Networking](https://docs.microsoft.com/en-us/azure/virtual-network/create-vm-accelerated-networking-cli).  You will potentially benefit from lower latency, reduced jitter, and decreased CPU utilization.
     
     Note: Always measure the network performance before and after you enable Accelerated Networking.  In some situations, you may experience worse performances. 
