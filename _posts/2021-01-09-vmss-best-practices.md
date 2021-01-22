@@ -1,5 +1,5 @@
 ---
-title: Virtal Machine Scale Sets (VMSS) best practices
+title: Virtual Machine Scale Sets (VMSS) best practices
 date: 2021-01-14 00:00:00 +0000
 description: Virtual Machine Scale Sets (VMSS) enable you to create and manage a group of load-balanced virtual machines easily. VMSS is an IaaS service usually used in the lift-and-shift scenarios or when hosting an application inside VM is the most optimal solution from a performance or Total Cost of Ownership perspective.
 categories: [Virtual Machines]
