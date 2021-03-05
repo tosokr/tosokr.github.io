@@ -7,7 +7,7 @@ tags: [ACI]
 toc: false 
 header:
  teaser: "/assets/img/posts/teasers/aci.png"
-permalink: /logic-app/keyvault-connector-with-managed-identity/
+permalink: /aci/azure-container-instances-custom-dns/
 excerpt: Azure Container Instances (ACI) is a serverless container runtime offering. You can use it to deploy Linux containers into an Azure virtual network, which will make them reachable from your networks. If you are using custom DNS resolvers in the VNET where you plan to deploy your ACI, the containers will not inherit that configuration. By default, they will use the Azure DNS service with the virtual IP address of 168.63.129.16.
 ---
 Azure Container Instances (ACI) enables you to run containers on-demand without managing or thinking about the infrastructure below. In summary, it is a serverless container runtime offering. It supports both Linux and Windows containers. 
