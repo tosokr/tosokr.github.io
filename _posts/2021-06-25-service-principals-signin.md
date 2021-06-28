@@ -14,12 +14,12 @@ You can use Microsoft Graph APIs to access Azure AD activity report. In version 
 
 To get all signIn activities for a specified service principal in the last 30 days (if any):
 *YOUR_APP_ID* - Application Id of the service principal.
-``` 
+```http 
 GET https://graph.microsoft.com/beta/auditLogs/signIns?$filter=signInEventTypes/any(t: t eq 'servicePrincipal') and (appId eq 'YOUR_APP_ID')
 ```
 
 To get the last signIn activity for a specified service principal in the last 30 days (if any):
-```
+```http
 GET https://graph.microsoft.com/beta/auditLogs/signIns?$filter=signInEventTypes/any(t: t eq 'servicePrincipal') and (appId eq 'YOUR_APP_ID')&top=1&orderby=createdDateTime%20desc
 ```
 I hope this will save you some valuable time trying to figure out how to call the API because it is not well documented in the official documentation.
