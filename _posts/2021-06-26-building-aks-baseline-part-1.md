@@ -1,89 +1,20 @@
 ---
-title: Building AKS baseline architecture - Part 1
+title: Building an AKS baseline architecture - Part 1
 date: 2021-06-26 00:00:00 +0000
-description: 
+description: In this series of posts, you will find all the steps needed to build a baseline or reference architecture for Azure Kubernetes Service (AKS) by incorporating all the best practices from the operations and governance perspective. In this post, in short, we discussed all the base AKS components, and we deployed a base AKS cluster. 
 categories: [Azure Kubernetes Service]
 tags: [AKS]
 toc: true 
 header:
  teaser: "/assets/img/posts/teasers/aks.png"
 permalink: /aks/baseline-part-1/
-excerpt: 
+excerpt: In this series of posts, you will find all the steps needed to build a baseline or reference architecture for Azure Kubernetes Service (AKS) by incorporating all the best practices from the operations and governance perspective. In this post, in short, we discussed all the base AKS components, and we deployed a base AKS cluster. 
 ---
 ## Overview
-Azure Kubernetes Service (AKS) is a managed Kubernetes cluster offering by Microsoft. Everything around AKS is pretty well documented in the [official documentation](https://docs.microsoft.com/en-us/azure/aks/). The idea of this post series is not to copy/paste what is already well document out there but to put in place everything you need to build a baseline deployment for AKS, following the best practices. 
-Then, to learn more about the particular features of that baseline deployment, I will provide links in the appropriate section.
-We will be using the imperative way of deploying by leveraging the Azure CLI for learning and demonstrating purposes. I strongly recommend using a declarative tool for production workloads, such as Terraform or Bicep. 
+Azure Kubernetes Service (AKS) is a managed Kubernetes cluster offering by Microsoft. Everything around AKS is pretty well documented in the [official documentation](https://docs.microsoft.com/en-us/azure/aks/). The idea of this post series is not to copy/paste what is already well documented out there but to put in place everything you need to build a baseline deployment for AKS, following the best practices. 
+Then, to learn more about the particular features of that baseline deployment, links are provided in the appropriate section.
+We will be using the imperative way of deploying by leveraging the Azure CLI because it is easier to view the actual workflow fully, and it is much easier to learn by going step-by-step. However, it is strongly recommended to use a declarative tool for production workloads, such as Terraform or Bicep.  
 
-## Prerequisite for the AKS deployment
-As part of our prerequisite for deploying the cluster, we need to create a resource group, virtual network with a subnet, and log analytics workspace for storing Kubernetes logs and container insights. We also need to register several providers and features in our subscription for the features we will use.
-
-### Variables
-````bash
-# VARIABLES
-SUBSCRIPTION_ID=""
-RESOURCE_GROUP="rg-aks-baseline"
-LOCATION="westeurope"
-CLUSTER_NAME="aks-baseline"
-VNET_NAME="vnet-aks-baseline"
-VNET_ADDRESS_SPACE="10.10.0.0/16"
-VNET_SUBNET_NAME="snet-"$CLUSTER_NAME
-VNET_SUBNET_ADDRESS_SPACE="10.10.0.0/24"
-LOGANALYTICS_NAME="log-"$CLUSTER_NAME
-LOGANALYTICS_RETENTION_DAYS=30 #30-730
-````
-
-#### Login to the subscription
-````bash
-az login 
-az account set --subscription $SUBSCRIPTION_ID
-````
-
-#### Resource group
-````bash
-resourceGroupExists=$(az group exists --name "$RESOURCE_GROUP")
-if [ "$resourceGroupExists" == "false" ]; then 
-    echo "Creating resource group: "$RESOURCE_GROUP" in location: ""$LOCATION"
-    az group create --name "$RESOURCE_GROUP" --location "$LOCATION"
-fi
-````
-#### VNET and subnet
-````bash
-vnetExists=$(az network vnet list -g "$RESOURCE_GROUP" --query "[?name=='$VNET_NAME'].name" -o tsv)
-if [ "$vnetExists" != "$VNET_NAME" ]; then
-    az network vnet create --resource-group $RESOURCE_GROUP --name $VNET_NAME \
-    --address-prefix $VNET_ADDRESS_SPACE
-fi
-
-subnetExists=$(az network vnet subnet list -g "$RESOURCE_GROUP" --vnet-name $VNET_NAME --query "[?name=='$VNET_SUBNET_NAME'].name" -o tsv)
-if [ "$subnetExists" != "$VNET_SUBNET_NAME" ]; then
-    VNET_SUBNET_ID=$(az network vnet subnet create --resource-group $RESOURCE_GROUP --name $VNET_SUBNET_NAME \
-    --address-prefixes $VNET_ADDRESS_SPACE --vnet-name $VNET_NAME --query id -o tsv)
-else
-    VNET_SUBNET_ID=$(az network vnet subnet list -g "$RESOURCE_GROUP" --vnet-name $VNET_NAME --query "[?name=='$VNET_SUBNET_NAME'].id" -o tsv)
-fi
-````
-#### Log Analytics Workspace
-````bash
-logAnalyticsExists=$(az monitor log-analytics workspace list --resource-group $RESOURCE_GROUP --query "[?name=='$LOGANALYTICS_NAME'].name" -o tsv)
-if [ "$logAnalyticsExists" != "$LOGANALYTICS_NAME" ]; then
-    az monitor log-analytics workspace create --resource-group $RESOURCE_GROUP --workspace-name $LOGANALYTICS_NAME --location $LOCATION --retention-time $LOGANALYTICS_RETENTION_DAYS
-fi
-````
-#### Register necessary resource providers and features on the subscription
-For using [Azure Policy in AKS](https://docs.microsoft.com/en-us/azure/aks/use-azure-policy):
-````bash
-az provider register --namespace Microsoft.PolicyInsights
-````
-For [Container Insigths](https://docs.microsoft.com/en-us/azure/azure-monitor/containers/container-insights-overview):
-````bash
-az provider register --namespace Microsoft.OperationsManagement
-az provider register --namespace Microsoft.OperationalInsights
-````
-For [Encryption at host](https://docs.microsoft.com/en-us/azure/aks/enable-host-encryption):
-````bash
-az feature register --namespace Microsoft.Compute --name EncryptionAtHost
-````
 ## AKS Cluster
 ### AKS Cluster components
 #### Network Plugin
@@ -131,21 +62,135 @@ AKS clusters deployed in multiple [availability zones](https://docs.microsoft.co
 In the baseline, we are going to use three (the maximum number of) availability zones per node pool. If you have a latency sensitive workload, you may consider to use a single zone for the user node pool hosting that workload. 
 Volumes that use Azure managed disks are currently not zone-redundant resources (the feature is available in [preview](https://docs.microsoft.com/en-us/azure/virtual-machines/disks-redundancy?tabs=azure-cli#zone-redundant-storage-for-managed-disks-preview)). Volumes cannot be attached across zones and must be co-located in the same zone as a given node hosting the target pod.
 
-### Create AKS Cluster
+### Deployment prerequisites
+As part of our prerequisites for deploying the cluster, we need to create a resource group, virtual network with a subnet, and log analytics workspace for storing Kubernetes logs and container insights. We also need to register several providers and features in our subscription for the features we will use.
+```bash
+# VARIABLES
+SUBSCRIPTION_ID=""
+RESOURCE_GROUP="rg-aks-baseline"
+LOCATION="westeurope"
+CLUSTER_NAME="aks-baseline"
+VNET_NAME="vnet-aks-baseline"
+VNET_ADDRESS_SPACE="10.10.0.0/16"
+VNET_SUBNET_NAME="snet-"$CLUSTER_NAME
+VNET_SUBNET_ADDRESS_SPACE="10.10.0.0/22"
+ACI_SUBNET_NAME="snet-aci-"$CLUSTER_NAME
+ACI_SUBNET_ADDRESS_SPACE="10.10.4.0/23"
+LOGANALYTICS_NAME="log-"$CLUSTER_NAME
+LOGANALYTICS_RETENTION_DAYS=30 #30-730
 
-````bash
+# LOGIN TO THE SUBSCRIPTION
+az login 
+az account set --subscription $SUBSCRIPTION_ID
+
+# REGISTER THE AZURE POLICY PROVIDER
+az provider register --namespace Microsoft.PolicyInsights
+
+# REGISTER PROVIDERS FOR CONTAINER INSIGHTS
+az provider register --namespace Microsoft.OperationsManagement
+az provider register --namespace Microsoft.OperationalInsights
+
+# REGISTER THE ENCRYPTION-AT-HOST FEATURE
+az feature register --namespace Microsoft.Compute --name EncryptionAtHost
+
+# CREATE THE RESOURCE GROUP
+resourceGroupExists=$(az group exists --name "$RESOURCE_GROUP")
+if [ "$resourceGroupExists" == "false" ]; then 
+    echo "Creating resource group: "$RESOURCE_GROUP" in location: ""$LOCATION"
+    az group create --name "$RESOURCE_GROUP" --location "$LOCATION"
+fi
+
+# CREATE THE VNET
+vnetExists=$(az network vnet list -g "$RESOURCE_GROUP" --query "[?name=='$VNET_NAME'].name" -o tsv)
+if [ "$vnetExists" != "$VNET_NAME" ]; then
+    az network vnet create --resource-group $RESOURCE_GROUP --name $VNET_NAME \
+    --address-prefix $VNET_ADDRESS_SPACE
+fi
+
+# CREATE SUBNET FOR THE CLUSTER 
+subnetExists=$(az network vnet subnet list -g "$RESOURCE_GROUP" --vnet-name $VNET_NAME --query "[?name=='$VNET_SUBNET_NAME'].name" -o tsv)
+if [ "$subnetExists" != "$VNET_SUBNET_NAME" ]; then
+    VNET_SUBNET_ID=$(az network vnet subnet create --resource-group $RESOURCE_GROUP --name $VNET_SUBNET_NAME \
+    --address-prefixes $VNET_SUBNET_ADDRESS_SPACE --vnet-name $VNET_NAME --query id -o tsv)
+else
+    VNET_SUBNET_ID=$(az network vnet subnet list -g "$RESOURCE_GROUP" --vnet-name $VNET_NAME --query "[?name=='$VNET_SUBNET_NAME'].id" -o tsv)
+fi
+
+# CREATE SUBNET FOR AZURE CONTAINER INSTANCES (ACI)
+subnetExists=$(az network vnet subnet list -g "$RESOURCE_GROUP" --vnet-name $VNET_NAME --query "[?name=='$ACI_SUBNET_NAME'].name" -o tsv)
+if [ "$subnetExists" != "$ACI_SUBNET_NAME" ]; then
+    ACI_SUBNET_ID=$(az network vnet subnet create --resource-group $RESOURCE_GROUP --name $ACI_SUBNET_NAME \
+    --address-prefixes $ACI_SUBNET_ADDRESS_SPACE --vnet-name $VNET_NAME --query id -o tsv)
+else
+    ACI_SUBNET_ID==$(az network vnet subnet list -g "$RESOURCE_GROUP" --vnet-name $VNET_NAME --query "[?name=='$ACI_SUBNET_NAME'].id" -o tsv)
+fi
+
+
+# CREATE LOG ANALYTICS WORKSPACE
+logAnalyticsExists=$(az monitor log-analytics workspace list --resource-group $RESOURCE_GROUP --query "[?name=='$LOGANALYTICS_NAME'].name" -o tsv)
+if [ "$logAnalyticsExists" != "$LOGANALYTICS_NAME" ]; then
+    az monitor log-analytics workspace create --resource-group $RESOURCE_GROUP \
+    --workspace-name $LOGANALYTICS_NAME --location $LOCATION --retention-time $LOGANALYTICS_RETENTION_DAYS
+fi
+
+```
+### Create the AKS Cluster
+
+The *az aks create* command doesn't support setting the node-taints on the default node pool it makes during cluster creation. For that reason, we will first create a "temp" node pool, and afterward, we will replace it with a proper dedicated system node pool.
+
+```bash
+# VARIABLES
+SYSTEM_NODE_VM_SIZE="Standard_D4ds_v4"
+SYSTEM_NODE_OS_DISK_SIZE=100
+
+# CREATE THE CLUSTER
 aksClusterExists=$(az aks list -g $RESOURCE_GROUP --query "[?name=='$CLUSTER_NAME'].name" -o tsv)
 if [ "$aksClusterExists" != "$CLUSTER_NAME" ]; then
-    AKS_RESOURCE_ID=$(az aks create -g $RESOURCE_GROUP -n $CLUSTER_NAME --enable-managed-identity --enable-aad --enable-azure-rbac \    
-    --generate-ssh-keys --location $LOCATION --node-vm-size $SYSTEM_NODE_VM_SIZE --nodepool-name systemtemp \
-    --node-count 1 --zones {1,2,3} --network-policy calico --network-plugin azure \
-    --vnet-subnet-id $VNET_SUBNET_ID --enable-addons monitoring,azure-policy \    
+    AKS_RESOURCE_ID=$(az aks create -g $RESOURCE_GROUP -n $CLUSTER_NAME \
+    --generate-ssh-keys --location $LOCATION --node-vm-size $SYSTEM_NODE_VM_SIZE --nodepool-name systemtemp --node-count 1 \
+    --node-osdisk-type Ephemeral --node-osdisk-size $SYSTEM_NODE_OS_DISK_SIZE --zones {1,2,3} \
+    --network-policy calico --network-plugin azure --vnet-subnet-id $VNET_SUBNET_ID  --aci-subnet-name $ACI_SUBNET_NAME \
+    --enable-managed-identity --enable-aad --enable-azure-rbac --enable-addons monitoring,azure-policy,virtual-node \
     --workspace-resource-id "/subscriptions/$SUBSCRIPTION_ID/resourcegroups/$RESOURCE_GROUP/providers/microsoft.operationalinsights/workspaces/$LOGANALYTICS_NAME" \
     --yes --query id -o tsv --only-show-errors )  
 else
     AKS_RESOURCE_ID==$(az aks show -g $RESOURCE_GROUP -n $CLUSTER_NAME --query id -o tsv --only-show-errors)
 fi
-````
+```
+Next, we will create a dedicated system node pool and delete the one previously created as part of the cluster deployment.
+```bash
+SYSTEM_NODE_NAME="system"
+SYSTEM_MIN_COUNT=2
+SYSTEM_MAX_COUNT=5
 
+aksSystemNodePoolExists=$(az aks nodepool list -g $RESOURCE_GROUP --cluster-name $CLUSTER_NAME --query "[?name=='$SYSTEM_NODE_NAME'].name" -o tsv --only-show-errors)
+if [ "$aksSystemNodePoolExists" != "$SYSTEM_NODE_NAME" ]; then
+    az aks nodepool add -g $RESOURCE_GROUP --cluster-name $CLUSTER_NAME \
+    --name $SYSTEM_NODE_NAME --node-vm-size $SYSTEM_NODE_VM_SIZE --enable-cluster-autoscaler \
+    --node-osdisk-type Ephemeral --node-osdisk-size $SYSTEM_NODE_OS_DISK_SIZE --zones {1,2,3} \
+    --max-count $SYSTEM_MAX_COUNT --min-count $SYSTEM_MIN_COUNT --mode System \
+    --vnet-subnet-id $VNET_SUBNET_ID --max-surge 33% --node-taints CriticalAddonsOnly=true:NoSchedule 
+    # delete the existing "temp" system  node pool
+    az aks nodepool delete -g $RESOURCE_GROUP --cluster-name $CLUSTER_NAME -n systemtemp
+fi
+```
+We will also add a dedication user node pool for hosting our application pods
+```bash
+USER_NODE_NAME="user1"
+USER_NODE_VM_SIZE="Standard_D4ds_v4"
+USER_NODE_OS_DISK_SIZE=100
+USER_MIN_COUNT=1
+USER_MAX_COUNT=4
 
+aksUserNodePoolExists=$(az aks nodepool list -g $RESOURCE_GROUP --cluster-name $CLUSTER_NAME --query "[?name=='$USER_NODE_NAME'].name" -o tsv --only-show-errors)
+if [ "$aksUserNodePoolExists" != "$USER_NODE_NAME" ]; then
+    az aks nodepool add -g $RESOURCE_GROUP --cluster-name $CLUSTER_NAME \
+    --node-osdisk-type Ephemeral --node-osdisk-size $USER_NODE_OS_DISK_SIZE --zones {1,2,3} \
+    --name $USER_NODE_NAME --node-vm-size $USER_NODE_VM_SIZE --enable-cluster-autoscaler \
+    --max-count $USER_MAX_COUNT --min-count $USER_MIN_COUNT --mode User \
+    --vnet-subnet-id $VNET_SUBNET_ID --max-surge 33%
+fi
+```
 
+## Next
+In the next part, we will configure logging for the AKS control plane, create appropriate RBAC roles, deploy Azure Container Registry (ACR) and Azure Defender for Container Registries and deploy some policies to govern our cluster.
