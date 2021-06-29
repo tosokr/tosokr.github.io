@@ -3,12 +3,13 @@ title: "About"
 permalink: /about/
 author_profile: true
 ---
-My name is Aleksandar Stefanov. I am an IT professional with more than 15 years of experience. During that time, I gained hands-on know-how in architecting and deploying solutions for different organizations' sizes across many industries and sectors. 
+If you landed on this page, you probably were curious to see who this guy is. Or maybe you clicked by error?
 
-With my strong technical skills and excellent interpersonal skills, I can develop and coordinate cloud architecture between IT and business operations, translate the business requirements into technical solutions, and help clients in their successful cloud journey. With my professional background, I can also lead and take an active part in technical implementations. In a team environment, I am both a natural team leader and a productive team member.
+Nevertheless, hi, my name is Aleksandar Stefanov. I am an IT professional with more than 15 years of experience, born and raised in Macedonia. After I graduated from the university, back in 2004, I started working as a systems engineer and teaching assistant at the faculty I was studying in the previous four years. I started my master's studies in parallel, but after finishing the first year, I realized that the academic environment is not for me. Early 2006, I joined a company named Infinite Solutions, where I stayed for almost 14 years. In the last several years at Infinite Solutions, I figure out that the cloud is the future, and I focused my development and my work towards Azure. 
+To gain experience working on bigger enterprise projects, I looked for opportunities abroad and landed in The Netherlands. Here I worked first at Devoteam, one of the leading IT consulting companies in Europe. Today I am an Azure Solutions Architect at the Cloud Center of Excellence (CCoE) at TomTom.
 
-I hold B.Sc in Computer Science, Azure Solutions Architect Expert, and Azure DevOps Solutions certifications from Microsoft and Professional Cloud Architect certification from Google.
+Opinions on this site are my own, not connected to the work I am doing at TomTom.
 
-Currently, I work as a Cloud Architect at TomTom. Opinions on this site are my own.
+If you want to get in touch with me, please drop me an email or reach me at [Linkedin](https://www.linkedin.com/in/aleksandarstefanov/).
 
-To find out more details about my work experience, please visit my [Linkedin](https://www.linkedin.com/in/aleksandarstefanov/) profile.
+;Aleksandar
