@@ -154,7 +154,7 @@ if [ "$aksClusterExists" != "$CLUSTER_NAME" ]; then
     --workspace-resource-id "/subscriptions/$SUBSCRIPTION_ID/resourcegroups/$RESOURCE_GROUP/providers/microsoft.operationalinsights/workspaces/$LOGANALYTICS_NAME" \
     --yes --query id -o tsv --only-show-errors )  
 else
-    AKS_RESOURCE_ID==$(az aks show -g $RESOURCE_GROUP -n $CLUSTER_NAME --query id -o tsv --only-show-errors)
+    AKS_RESOURCE_ID=$(az aks show -g $RESOURCE_GROUP -n $CLUSTER_NAME --query id -o tsv --only-show-errors)
 fi
 ```
 Next, we will create a dedicated system node pool and delete the one previously created as part of the cluster deployment.
