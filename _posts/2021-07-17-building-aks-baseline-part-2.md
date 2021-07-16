@@ -162,3 +162,43 @@ az aks get-credentials -g $RESOURCE_GROUP -n $CLUSTER_NAME
 az aks get-credentials -g $RESOURCE_GROUP -n $CLUSTER_NAME --admin
 ```
 Install [kubectx](https://github.com/ahmetb/kubectx) to be able to swich between the different kubernetes clusters or even between the user and admin credentials for the same cluster. 
+
+# Azure Container Registry (ACR)
+
+[Azure Container Registry](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-intro) is a private registry service for building, storing, and managing container images and related artifacts. As a best practice, for your production workloads, don't rely on the public registries for hosting your application's or dependencies container images. Instead, deploy your own registy over which you have a full control and you can implement governance controls.
+
+ACR offers [three tiers](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-skus): Basic, Standard and Premium. The Premium SKU offers geo-replication and availability zones support (in preview) and it reccomended for enterprise deployments.
+
+You can [authenticate to the ACR](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-authentication?tabs=azure-cli) using Azure AD (with user or service credentials) or with an admin user. Best practice is to disable the admin user and don't use that in production. AKS cluster will authenticate to the ACR using its managed identity.
+
+```bash
+# CREATE THE CONTAINER REGISTRY
+ACR_NAME=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 16 | head -n 1) # NEEDS TO BE UNIQUE
+RESOURCE_GROUP_ACR=$RESOURCE_GROUP-acr
+
+resourceGroupExists=$(az group exists --name "$RESOURCE_GROUP_ACR")
+if [ "$resourceGroupExists" == "false" ]; then 
+    echo "Creating resource group: "$RESOURCE_GROUP_ACR" in location: ""$LOCATION"
+    az group create --name "$RESOURCE_GROUP_ACR" --location "$LOCATION"
+fi
+
+acrExists=$(az acr list -g $RESOURCE_GROUP_ACR --query "[?name=='$ACR_NAME'].name" -o tsv)
+if [ "$acrExists" != "$ACR_NAME" ]; then
+   ACR_ID=$(az acr create -g $RESOURCE_GROUP_ACR -n $ACR_NAME --sku Basic --admin-enabled false --location $LOCATION --query id -o tsv)
+else
+   ACR_ID=$(az acr list -g $RESOURCE_GROUP_ACR --query "[?name=='$ACR_NAME'].id" -o tsv ) 
+fi
+```
+Next, we need to give permissions to the AKS cluster to be able to pull images from the ACR.
+```bash
+# ALLOW ACCESS TO THE ACR FROM AKS
+az aks update -n $CLUSTER_NAME -g $RESOURCE_GROUP --attach-acr $ACR_NAME
+```
+The previous command assings the AcrPull role to the Kubelet Identity (User Managed Identity assigned to the nodepools). To verify this:
+```bash
+CLUSTER_IDENTITY_ID=$(az aks show -g $RESOURCE_GROUP -n $CLUSTER_NAME --query identityProfile.kubeletidentity.clientId -o tsv)
+az role assignment list --assignee $CLUSTER_IDENTITY_ID --scope $ACR_ID
+```  
+## Azure Defender for Container Registries
+
+# Azure Policies-
