@@ -1,5 +1,5 @@
 ---
-title: Building an AKS baseline architecture - Part 1
+title: Building an AKS baseline architecture - Part 1 - Cluster creation
 date: 2021-06-27 00:00:00 +0000
 description: In this series of posts, you will find all the steps needed to build a baseline or reference architecture for Azure Kubernetes Service (AKS) by incorporating all the best practices from the operations and governance perspective. In this post, in short, we discussed all the base AKS components, and we deployed a base AKS cluster. 
 categories: [Azure Kubernetes Service]
@@ -154,7 +154,7 @@ if [ "$aksClusterExists" != "$CLUSTER_NAME" ]; then
     --workspace-resource-id "/subscriptions/$SUBSCRIPTION_ID/resourcegroups/$RESOURCE_GROUP/providers/microsoft.operationalinsights/workspaces/$LOGANALYTICS_NAME" \
     --yes --query id -o tsv --only-show-errors )  
 else
-    AKS_RESOURCE_ID==$(az aks show -g $RESOURCE_GROUP -n $CLUSTER_NAME --query id -o tsv --only-show-errors)
+    AKS_RESOURCE_ID=$(az aks show -g $RESOURCE_GROUP -n $CLUSTER_NAME --query id -o tsv --only-show-errors)
 fi
 ```
 Next, we will create a dedicated system node pool and delete the one previously created as part of the cluster deployment.
@@ -193,4 +193,4 @@ fi
 ```
 
 ## Next
-In the next part, we will configure logging for the AKS control plane, create appropriate RBAC roles, deploy Azure Container Registry (ACR) and Azure Defender for Container Registries and deploy some policies to govern our cluster.
+In the [next part]({% post_url 2021-07-17-building-aks-baseline-part-2 %}), we will configure logging for the AKS control plane, create appropriate RBAC roles, deploy Azure Container Registry (ACR) and Azure Defender for Container Registries and deploy some policies to govern our cluster.
