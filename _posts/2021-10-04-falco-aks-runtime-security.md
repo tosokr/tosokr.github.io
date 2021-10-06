@@ -1,14 +1,14 @@
 ---
-title: Falco as an AKS runtime security tool
+title: Falco as an Azure Kubernetes Service (AKS) runtime security tool
 date: 2021-10-04 00:00:00 +0000
-description: Falco is an open-source tool for container runtime security that can help you secure AKS from zero-day vulnerabilities and unexpected behaviors inside containers and in the host OS. Using Flacosidekick, you can add custom fields to the generated events and forward those to your ecosystem of observability and SIEM tools.
+description: Falco is an open-source tool for container runtime security that can help you secure Azure Kubernetes Service (AKS) from zero-day vulnerabilities and unexpected behaviors inside containers and in the host OS. Using Flacosidekick, you can add custom fields to the generated events and forward those to your ecosystem of observability and SIEM tools.
 categories: [Azure Kubernetes Service]
 tags: [AKS]
 toc: true 
 header:
  teaser: "/assets/img/posts/teasers/falco.png"
 permalink: /aks/falco-aks-runtime-security/
-excerpt: Falco is an open-source tool for container runtime security that can help you secure AKS from zero-day vulnerabilities and unexpected behaviors inside containers and in the host OS. Using Flacosidekick, you can add custom fields to the generated events and forward those to your ecosystem of observability and SIEM tools. 
+excerpt: Falco is an open-source tool for container runtime security that can help you secure Azure Kubernetes Service (AKS) from zero-day vulnerabilities and unexpected behaviors inside containers and in the host OS. Using Flacosidekick, you can add custom fields to the generated events and forward those to your ecosystem of observability and SIEM tools. 
 ---
 
 # Overview
@@ -22,7 +22,7 @@ excerpt: Falco is an open-source tool for container runtime security that can he
 
 It is the first runtime security project to join the CNCF as an incubation-level project.  Falco detects unexpected or malicious application and environment behavior using security rules. Rules are built-in, available from the community, and easily extendable using Falco’s flexible rules engine. Falco is easily pluggable into the security detection and response workflows to identify and alert on runtime threats.
 
-Falco, by default, emits events in text or JSON format to stdout and syslog and has an option to save those events (security notification) in a file.  The behavior is changeable via the configuration. The emitted events can be collected by the SIEM tool for real-time analysis and reporting. 
+Falco, by default, emits events in text or JSON format to stdout and syslog and has an option to save those events (security notifications) into a file.  The behavior is changeable via the configuration. The emitted events can be collected by the SIEM tool for real-time analysis and reporting. 
 
 # Falco in AKS
 
@@ -70,7 +70,7 @@ If you are using Prometheus and Grafana as an obeservability stack for your clus
  kubectl port-forward -n falco falco-falcosidekick-ui-8hsh856769-99h8s 2802:2802
 ```
 
-# Sample deplyoment script for Falco in AKS
+# Sample Falco deployment script for AKS
 
 Falco offers a [Helm chart](https://github.com/falcosecurity/charts/tree/master/falco) for easy deployment. It includes a [default ruleset](https://github.com/falcosecurity/charts/tree/master/falco/rules), which is easily extendable with custom rules. 
 
@@ -78,14 +78,14 @@ The following is an example script of how you can set up Falco in your AKS clust
 
 ```bash
 # SET THE VARIABLES FOR THE DEPLOYMENT
-export AKS_RESOURCE_GROUP="rg-reference2-westeurope-dev"
-export AKS_CLUSTER_NAME="aks-reference2-westeurope-dev"
-export DEPLOYER="ccoe" # contact details of the team operating the cluster
-export IDENTITY_NAME="id-ccoe-aleksandar-falco-eventhub"
+export AKS_RESOURCE_GROUP=""
+export AKS_CLUSTER_NAME=""
+export DEPLOYER="" # contact details of the team operating the cluster
+export IDENTITY_NAME="id-falco-eventhub"
 export NAMESPACE="falco"
 export RESOURCE_GROUP="rg-event-hub"
 export LOCATION="westeurope"
-export EVENT_HUB_NAMESPACE="ttfalcotest" # needs to be globaly unique
+export EVENT_HUB_NAMESPACE="" # needs to be globaly unique
 export EVENT_HUB_NAME="falco"
 export SUBSCRIPTION_ID=$(az account show --query id -o tsv)
 export TENANT_ID=$(az account show --query tenantId -o tsv)
@@ -124,6 +124,14 @@ helm repo add falcosecurity https://falcosecurity.github.io/charts
 helm repo update
 
 # GENERATE THE CUSTOM RULES FILE
+mkdir custom-rules
+wget https://raw.githubusercontent.com/tosokr/falco-custom-rules/main/rules2helm.sh
+wget -P custom-rules https://raw.githubusercontent.com/tosokr/falco-custom-rules/main/custom-rules/ingress-traefik.yaml
+wget -P custom-rules https://raw.githubusercontent.com/tosokr/falco-custom-rules/main/custom-rules/ingress-nginx.yaml
+wget -P custom-rules https://raw.githubusercontent.com/tosokr/falco-custom-rules/main/custom-rules/admin-activities.yaml
+wget -P custom-rules https://raw.githubusercontent.com/tosokr/falco-custom-rules/main/custom-rules/file-integrity.yaml
+wget -P custom-rules https://raw.githubusercontent.com/tosokr/falco-custom-rules/main/custom-rules/ssh-connections.yaml
+
 ./rules2helm.sh custom-rules/ingress-traefik.yaml custom-rules/ingress-nginx.yaml \
 custom-rules/admin-activities.yaml custom-rules/file-integrity.yaml \
 custom-rules/ssh-connections.yaml > custom-rules.yaml
@@ -138,11 +146,46 @@ helm upgrade --create-namespace --install -n falco falco falcosecurity/falco  \
 --values custom-rules.yaml
 ```
 
-# Check the generated events
-
-To check that Falco can generates events using the custom rules, we will:
-* deploy an Nginx pod 
-* connect to the pod using a terminal
-* start package manager inside the pod
+# Verify the Falco events
 
 
+* Deploy an nginx pod 
+
+  ```bash
+  helm repo add azure-marketplace https://marketplace.azurecr.io/helm/v1/repo
+  helm repo update
+  helm install --namespace nginx --create-namespace nginx azure-marketplace/nginx
+  ```
+
+* Forward the falcosidekick-ui port to the localhost
+
+  ```bash
+  kubectl port-forward -n falco falco-falcosidekick-ui-8hsh856769-99h8s 2802:2802
+  ```
+
+* Open falcosidekick-ui: http://localhost:2802/ui/#/
+
+* Connect to the nginx pod using a terminal
+
+  ```bash
+  k exec -n nginx nginx-57f7ff9fdd-bhlqx --tty --stdin -- /bin/sh
+  ```
+  
+  ![Desktop View]({{ "/assets/img/posts/falco/falco-nginx-shell.png" | relative_url }})
+
+* Use su inside the pod
+
+  ```bash
+  su root
+  ```
+
+  ![Desktop View]({{ "/assets/img/posts/falco/falco-nginx-su.png" | relative_url }})
+
+* Execute some random command inside the pod
+
+  ```bash
+   cat index.html
+  ```
+
+  ![Desktop View]({{ "/assets/img/posts/falco/falco-nginx-spawned-process.png" | relative_url }})
+ 
