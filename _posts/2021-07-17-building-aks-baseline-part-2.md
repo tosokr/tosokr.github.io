@@ -241,5 +241,3 @@ az policy assignment create --name "aks-only-allowed-images" --display-name "Kub
 --params "{ \"effect\": { \"value\": \"deny\" }, \"excludedNamespaces\": {\"value\": [\"kube-system\", \"gatekeeper-system\", \"flux-system\" ]}, \"allowedContainerImagesRegex\": {\"value\":\"^$ACR_NAME.azurecr.io/.+$\"}}"
 
 ```
-# Next
-In the next part, we will install Flux v2 and deploy several applications that will be part of our baseline deployment. Stay tuned!
