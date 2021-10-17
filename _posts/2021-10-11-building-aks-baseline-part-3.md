@@ -1,14 +1,14 @@
 ---
 title: Building an AKS baseline architecture - Part 3 - GitOps with Flux2
 date: 2021-10-16 00:00:00 +0000
-description: In this series of posts, you will find all the steps needed to build a baseline or reference architecture for Azure Kubernetes Service (AKS) by incorporating all the best practices from the operations and governance perspective. In this post, in short, we discussed all control plane logging, RBAC role assignments, Azure Container Registries, and Azure Policy.
+description: In this series of posts, you will find all the steps needed to build a baseline or reference architecture for Azure Kubernetes Service (AKS) by incorporating all the best practices from the operations and governance perspective. In this post, we will explore the GitOps concept and how to make it work using Flux2. 
 categories: [Azure Kubernetes Service]
 tags: [AKS]
 toc: true 
 header:
  teaser: "/assets/img/posts/teasers/aks.png"
 permalink: /aks/baseline-part-3/
-excerpt: In this series of posts, you will find all the steps needed to build a baseline or reference architecture for Azure Kubernetes Service (AKS) by incorporating all the best practices from the operations and governance perspective. In this post, in short, we discussed all control plane logging, RBAC role assignments, Azure Container Registries, and Azure Policy.
+excerpt: In this series of posts, you will find all the steps needed to build a baseline or reference architecture for Azure Kubernetes Service (AKS) by incorporating all the best practices from the operations and governance perspective. In this post, we will explore the GitOps concept and how to make it work using Flux2. 
 ---
 Posts from this series:
 
@@ -25,7 +25,7 @@ The core idea of GitOps is having a Git repository that always contains declarat
 
 There is a great [GitOps for AKS](https://docs.microsoft.com/en-us/azure/architecture/example-scenario/gitops-aks/gitops-blueprint-aks) document available in the Azure Architecture Center that can help you learn more about the need and the benefits of using the GitOps approach for AKS. In this article, I will focus on the implementation part of GitOps - how to make it work with Flux.
 
-# Flux2
+# Flux
 
 *[Flux](fluxcd.io) is a tool for keeping Kubernetes clusters in sync with sources of configuration (like Git repositories), and automating updates to configuration when there is new code to deploy.*
 
@@ -46,7 +46,7 @@ The design is not optimal for enterprise deployments, but it is a good starting 
 
 As a best practice, you should accommodate the trank-based development approach: create minor updates in short-living branches that you will merge to main by opening pull requests. For the simplicity of the demo, we will perform all commits directly to our main branch.
 
-## Install Flux2
+## Install Flux
 
 ```bash
 export GITHUB_USER=
@@ -152,9 +152,19 @@ NAME          URL                                                READY   STATUS 
 acr-private   https://xw5OUsrKQmU40Im4.azurecr.io/helm/v1/repo   True    Fetched revision: c45818b304c4b776703ab0fc56efbe492690830e   3h9m
 ```
 
-# Flux2 Helm deployment example: Kured
+# Sample Kured Helm deployment using Flux
 
 Kured (Kubernetes Reboot Daemon) is a DaemonSet that triggers a node reboot if a file exists at the predefined path. The underlying OS in AKS, Ubuntu 18.04, performs a security or kernel patch check every night and automatically installs the patches. If the patch requires a restart, AKS will create a/var/run/reboot-required file. In simple words, Kured makes sure that all critical updates are installed on the cluster.
+
+Note: Kured needs to be configured with the following tolerations to run on the dedicated system nodes:
+
+```yaml
+    tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists
+```
+
+Deploy Kured using HelmRelease and Kustomization:
 
 ```bash
 # PULL THE HELM CHART LOCALY
@@ -225,3 +235,47 @@ git commit -m "kured installation"
 git push
 cd ..
 ```
+
+# Useful flux commands
+
+## flux logs
+
+The logs command displays formatted logs from various Flux components. Check the usage:
+
+```bash
+flux logs --help
+```
+Executing the command without any flags will display all of the flux related logs:
+
+```bash
+flux logs
+```
+```
+...
+2021-10-17T17:32:11.598Z info GitRepository/flux-system.flux-system - Reconciliation finished in 1.197141019s, next run in 1m0s
+2021-10-17T17:32:40.881Z info HelmRepository/acr-private.flux-system - Reconciliation finished in 113.821332ms, next run in 1m0s
+2021-10-17T17:33:12.798Z info GitRepository/flux-system.flux-system - Reconciliation finished in 1.200518767s, next run in 1m0s
+2021-10-17T17:33:41.017Z info HelmRepository/acr-private.flux-system - Reconciliation finished in 134.590725ms, next run in 1m0s
+```
+
+## flux reconcile
+
+The reconcile sub-commands trigger a reconciliation of sources and resources. Check the usage:
+
+```bash
+flux reconcile --help
+```
+
+Using the configuration from above, if you want to reconcile the complete deployment, execute:
+
+```bash
+flux reconcile kustomization infrastructure
+```
+```
+► annotating Kustomization infrastructure in flux-system namespace
+✔ Kustomization annotated
+◎ waiting for Kustomization reconciliation
+✔ applied revision main/2a85d7ec6a63976aaac090197ff0882540a076c0
+```
+
+

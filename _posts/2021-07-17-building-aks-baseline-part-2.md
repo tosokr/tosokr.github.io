@@ -11,7 +11,13 @@ permalink: /aks/baseline-part-2/
 excerpt: In this series of posts, you will find all the steps needed to build a baseline or reference architecture for Azure Kubernetes Service (AKS) by incorporating all the best practices from the operations and governance perspective. In this post, in short, we discussed all control plane logging, RBAC role assignments, Azure Container Registries, and Azure Policy.
 ---
 
-In the [first part of this blog series]({% post_url 2021-06-26-building-aks-baseline-part-1 %}), we created the base AKS cluster following the best practices. Now it is time to apply some governance controls on top of it.
+Posts from this series:
+
+[Building an AKS baseline architecture - Part 1 - Cluster creation]({% post_url 2021-06-26-building-aks-baseline-part-1 %})
+
+[Building an AKS baseline architecture - Part 2 - Governance]({% post_url 2021-07-17-building-aks-baseline-part-2 %})
+
+[Building an AKS baseline architecture - Part 3 - GitOps with Flux2]({% post_url 2021-10-11-building-aks-baseline-part-3 %})
 
 # Control plane logging
 By default, logging is not enabled for the AKS's control plane components. It would be best to store the control plane logs to audit the operations against the cluster and for troubleshooting purposes. We can enable the logs by [configuring diagnostics settings for the AKS cluster](https://docs.microsoft.com/en-us/azure/aks/view-control-plane-logs).

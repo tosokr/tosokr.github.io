@@ -10,6 +10,14 @@ header:
 permalink: /aks/baseline-part-1/
 excerpt: In this series of posts, you will find all the steps needed to build a baseline or reference architecture for Azure Kubernetes Service (AKS) by incorporating all the best practices from the operations and governance perspective. In this post, in short, we discussed all the base AKS components, and we deployed a base AKS cluster. 
 ---
+Posts from this series:
+
+[Building an AKS baseline architecture - Part 1 - Cluster creation]({% post_url 2021-06-26-building-aks-baseline-part-1 %})
+
+[Building an AKS baseline architecture - Part 2 - Governance]({% post_url 2021-07-17-building-aks-baseline-part-2 %})
+
+[Building an AKS baseline architecture - Part 3 - GitOps with Flux2]({% post_url 2021-10-11-building-aks-baseline-part-3 %})
+
 ## Overview
 Azure Kubernetes Service (AKS) is a managed Kubernetes cluster offering by Microsoft. Everything around AKS is pretty well documented in the [official documentation](https://docs.microsoft.com/en-us/azure/aks/). The idea of this post series is not to copy/paste what is already well documented out there but to put in place everything you need to build a baseline deployment for AKS, following the best practices. 
 Then, to learn more about the particular features of that baseline deployment, links are provided in the appropriate section.
@@ -191,6 +199,3 @@ if [ "$aksUserNodePoolExists" != "$USER_NODE_NAME" ]; then
     --vnet-subnet-id $VNET_SUBNET_ID --max-surge 33%
 fi
 ```
-
-## Next
-In the [next part]({% post_url 2021-07-17-building-aks-baseline-part-2 %}), we will configure logging for the AKS control plane, create appropriate RBAC roles, deploy Azure Container Registry (ACR) and Azure Defender for Container Registries and deploy some policies to govern our cluster.
