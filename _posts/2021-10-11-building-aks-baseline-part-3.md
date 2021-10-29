@@ -27,7 +27,7 @@ There is a great [GitOps for AKS](https://docs.microsoft.com/en-us/azure/archite
 
 # Flux
 
-*[Flux](fluxcd.io) is a tool for keeping Kubernetes clusters in sync with sources of configuration (like Git repositories), and automating updates to configuration when there is new code to deploy.*
+*[Flux](https://fluxcd.io) is a tool for keeping Kubernetes clusters in sync with sources of configuration (like Git repositories), and automating updates to configuration when there is new code to deploy.*
 
 There are multiple approaches for organizing the git repos when enrolling Flux. In the baseline architecture, we will implement the [monorepo](https://fluxcd.io/docs/guides/repository-structure/#monorepo) approach - a single repository for multiple environments. Environments will have the same base infrastructure components,  but the versions of custom applications will be different:
 
