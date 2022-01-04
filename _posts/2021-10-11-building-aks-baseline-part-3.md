@@ -179,6 +179,23 @@ KURED_CHART_VERSION=$(helm show chart kured/kured | grep version |  awk -F" " '{
 az acr import --source docker.io/weaveworks/kured:$(helm show chart kured/kured | grep appVersion |  awk -F" " '{print $2}') \
 -n $ACR_NAME --force
 
+# NAMESPACE TO USE FOR BASELINE PODS
+cat > $GITHUB_REPO/infrastructure/base/namespace/namespace.yaml << ENDOFFILE
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: baseline
+ENDOFFILE
+
+# KUSTOMIZATION MANIFEST FOR NAMESPACE
+cat > $GITHUB_REPO/infrastructure/base/namespace/kustomization.yaml << ENDOFFILE
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: baseline
+resources:
+  - namespace.yaml
+ENDOFFILE
+
 # CREATE HELMRELEASE MANIFEST FOR KURED
 mkdir -p $GITHUB_REPO/infrastructure/base/kured
 cat > $GITHUB_REPO/infrastructure/base/kured/release.yaml << ENDOFFILE
@@ -210,21 +227,12 @@ spec:
       repository: ${ACR_NAME}.azurecr.io/weaveworks/kured
 ENDOFFILE
 
-# NAMESPACE TO USE FOR KURED
-cat > $GITHUB_REPO/infrastructure/base/kured/namespace.yaml << ENDOFFILE
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: baseline
-ENDOFFILE
-
 # KUSTOMIZATION MANIFEST FOR KURED
 cat > $GITHUB_REPO/infrastructure/base/kured/kustomization.yaml << ENDOFFILE
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: baseline
 resources:
-  - namespace.yaml
   - release.yaml
 ENDOFFILE
 
