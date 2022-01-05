@@ -22,9 +22,12 @@ Posts from this series:
 
 # Overview
 
-AAD Pod Identity is an open-source project hosted on [Github](https://github.com/Azure/aad-pod-identity). In preview, a managed add-on is available that you can enable for your AKS cluster, which will provide you with the same functionality. However, this add-on will never transition to General Availability because Microsoft is working on a V2 version.
+When we develop solutions, they usually include multiple Azure services that need to communicate between them. Moving the compute part of the solution to AKS leaves the same problem - who are we going to authenticate the communication between those Azure services? With the traditional approach, using service principals or connection keys, we have the problem of safely storing and rotating the credentials. Microsoft solved this problem by introducing Managed Identities. We can use Managed Identities for the [AKS Control plane and Kubelet](https://docs.microsoft.com/en-us/azure/aks/use-managed-identity), but can we use them for pods inside AKS? The answer is YES - with the open-source component named [AAD Pod Identity]((https://github.com/Azure/aad-pod-identity).
 
-Never use fixed credentials within pods or container images, as they are at risk of exposure or abuse. Instead, assign a Managed Identity to pods to automatically request access to resources using a central Azure AD identity solution. AAD Pod Identity enables Kubernetes applications to access cloud resources securely with Azure Active Directory. In addition to the security benefit, Managed Identities uses long-lived tokens and can handle Azure AD hiccups between 12 and  24 hours.
+AAD Pod Identity enables Kubernetes applications to access cloud resources securely with Azure Active Directory. In addition to the security benefit, Managed Identities uses long-lived tokens and can handle Azure AD hiccups between 12 and  24 hours.
+
+Note:  In preview, a managed add-on is available that you can enable for your AKS cluster, which will provide you with the same functionality. However, this add-on will never transition to General Availability because Microsoft is working on a V2 version.
+
 
 # How it works?
 
