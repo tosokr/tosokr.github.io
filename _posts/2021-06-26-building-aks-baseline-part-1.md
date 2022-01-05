@@ -18,6 +18,8 @@ Posts from this series:
 
 [Building an AKS baseline architecture - Part 3 - GitOps with Flux2]({% post_url 2021-10-11-building-aks-baseline-part-3 %})
 
+[Building an AKS baseline architecture - Part 4 - AAD Pod Identity]({% post_url 2022-01-04-building-aks-baseline-part-4 %})
+
 ## Overview
 Azure Kubernetes Service (AKS) is a managed Kubernetes cluster offering by Microsoft. Everything around AKS is pretty well documented in the [official documentation](https://docs.microsoft.com/en-us/azure/aks/). The idea of this post series is not to copy/paste what is already well documented out there but to put in place everything you need to build a baseline deployment for AKS, following the best practices. 
 Then, to learn more about the particular features of that baseline deployment, links are provided in the appropriate section.

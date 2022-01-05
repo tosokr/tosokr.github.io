@@ -18,6 +18,8 @@ Posts from this series:
 
 [Building an AKS baseline architecture - Part 3 - GitOps with Flux2]({% post_url 2021-10-11-building-aks-baseline-part-3 %})
 
+[Building an AKS baseline architecture - Part 4 - AAD Pod Identity]({% post_url 2022-01-04-building-aks-baseline-part-4 %})
+
 # What is GitOps?
 
 "*GitOps is a way of implementing Continuous Deployment for cloud native applications. It focuses on a developer-centric experience when operating infrastructure, by using tools developers are already familiar with, including Git and Continuous Deployment tools.
@@ -179,6 +181,23 @@ KURED_CHART_VERSION=$(helm show chart kured/kured | grep version |  awk -F" " '{
 az acr import --source docker.io/weaveworks/kured:$(helm show chart kured/kured | grep appVersion |  awk -F" " '{print $2}') \
 -n $ACR_NAME --force
 
+# NAMESPACE TO USE FOR BASELINE PODS
+cat > $GITHUB_REPO/infrastructure/base/namespace/namespace.yaml << ENDOFFILE
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: baseline
+ENDOFFILE
+
+# KUSTOMIZATION MANIFEST FOR NAMESPACE
+cat > $GITHUB_REPO/infrastructure/base/namespace/kustomization.yaml << ENDOFFILE
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: baseline
+resources:
+  - namespace.yaml
+ENDOFFILE
+
 # CREATE HELMRELEASE MANIFEST FOR KURED
 mkdir -p $GITHUB_REPO/infrastructure/base/kured
 cat > $GITHUB_REPO/infrastructure/base/kured/release.yaml << ENDOFFILE
@@ -210,21 +229,12 @@ spec:
       repository: ${ACR_NAME}.azurecr.io/weaveworks/kured
 ENDOFFILE
 
-# NAMESPACE TO USE FOR KURED
-cat > $GITHUB_REPO/infrastructure/base/kured/namespace.yaml << ENDOFFILE
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: baseline
-ENDOFFILE
-
 # KUSTOMIZATION MANIFEST FOR KURED
 cat > $GITHUB_REPO/infrastructure/base/kured/kustomization.yaml << ENDOFFILE
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: baseline
 resources:
-  - namespace.yaml
   - release.yaml
 ENDOFFILE
 

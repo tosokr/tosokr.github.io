@@ -19,6 +19,8 @@ Posts from this series:
 
 [Building an AKS baseline architecture - Part 3 - GitOps with Flux2]({% post_url 2021-10-11-building-aks-baseline-part-3 %})
 
+[Building an AKS baseline architecture - Part 4 - AAD Pod Identity]({% post_url 2022-01-04-building-aks-baseline-part-4 %})
+
 # Control plane logging
 By default, logging is not enabled for the AKS's control plane components. It would be best to store the control plane logs to audit the operations against the cluster and for troubleshooting purposes. We can enable the logs by [configuring diagnostics settings for the AKS cluster](https://docs.microsoft.com/en-us/azure/aks/view-control-plane-logs).
 
@@ -209,6 +211,8 @@ CLUSTER_IDENTITY_ID=$(az aks show -g $RESOURCE_GROUP -n $CLUSTER_NAME --query id
 az role assignment list --assignee $CLUSTER_IDENTITY_ID --scope $ACR_ID
 ```  
 ## Azure Defender for Container Registries
+Note: As of December 2021, Defender for Container Registries is deprecated and replaced by [Defender for Containers](https://docs.microsoft.com/en-us/azure/defender-for-cloud/defender-for-containers-introduction?tabs=defender-for-container-arch-aks).
+
 [Azure Defender for Container Registries](https://docs.microsoft.com/en-us/azure/security-center/defender-for-container-registries-introduction) scans all images when they're pushed to the registry, imported into the registry, or pulled within the last 30 days. It supports only Linux images stored in publicly accessible ACR. 
 
 ```bash
