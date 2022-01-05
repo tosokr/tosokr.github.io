@@ -18,6 +18,8 @@ Posts from this series:
 
 [Building an AKS baseline architecture - Part 3 - GitOps with Flux2]({% post_url 2021-10-11-building-aks-baseline-part-3 %})
 
+[Building an AKS baseline architecture - Part 4 - AAD Pod Identity]({% post_url 2022-01-04-building-aks-baseline-part-4 %})
+
 # What is GitOps?
 
 "*GitOps is a way of implementing Continuous Deployment for cloud native applications. It focuses on a developer-centric experience when operating infrastructure, by using tools developers are already familiar with, including Git and Continuous Deployment tools.

@@ -1,14 +1,14 @@
 ---
 title: Building an AKS baseline architecture - Part 4 - AAD Pod Identity
 date: 2022-01-04 00:00:00 +0000
-description: In this series of posts, you will find all the steps needed to build a baseline or reference architecture for Azure Kubernetes Service (AKS) by incorporating all the best practices from the operations and governance perspective. In this post, we will explore the GitOps concept and how to make it work using Flux2. 
+description: In this series of posts, you will find all the steps needed to build a baseline or reference architecture for Azure Kubernetes Service (AKS) by incorporating all the best practices from the operations and governance perspective. In this post, we will explore one of the core baseline componets - AAD Pod Identity. 
 categories: [Azure Kubernetes Service]
 tags: [AKS]
 toc: true 
 header:
  teaser: "/assets/img/posts/teasers/aks.png"
 permalink: /aks/baseline-part-4/
-excerpt: In this series of posts, you will find all the steps needed to build a baseline or reference architecture for Azure Kubernetes Service (AKS) by incorporating all the best practices from the operations and governance perspective. In this post, we will explore the GitOps concept and how to make it work using Flux2. 
+excerpt: In this series of posts, you will find all the steps needed to build a baseline or reference architecture for Azure Kubernetes Service (AKS) by incorporating all the best practices from the operations and governance perspective. In this post, we will explore one of the core baseline componets - AAD Pod Identity. 
 ---
 Posts from this series:
 
@@ -22,9 +22,9 @@ Posts from this series:
 
 # Overview
 
-AAD Pod Identity is an open-source project hosted on [Github](https://github.com/Azure/aad-pod-identity). In preview, there is available managed add-on that you can enable for your AKS cluster which will provide you with the same functionality. However, this add-on will never transition to General Availability because Microsoft is working on a V2 version.
+AAD Pod Identity is an open-source project hosted on [Github](https://github.com/Azure/aad-pod-identity). In preview, a managed add-on is available that you can enable for your AKS cluster, which will provide you with the same functionality. However, this add-on will never transition to General Availability because Microsoft is working on a V2 version.
 
-Never use fixed credentials within pods or container images, as they are at risk of exposure or abuse. Instead, assign a Managed Identity to pods to automatically request access to resources using a central Azure AD identity solution. AAD Pod Identity enables Kubernetes applications to access cloud resources securely with Azure Active Directory. In addition to the security benefit, Managed Identities are using long lived tokens, and can handle Azure AD hiccups of minimum 12 hours.
+Never use fixed credentials within pods or container images, as they are at risk of exposure or abuse. Instead, assign a Managed Identity to pods to automatically request access to resources using a central Azure AD identity solution. AAD Pod Identity enables Kubernetes applications to access cloud resources securely with Azure Active Directory. In addition to the security benefit, Managed Identities uses long-lived tokens and can handle Azure AD hiccups between 12 and  24 hours.
 
 # How it works?
 
