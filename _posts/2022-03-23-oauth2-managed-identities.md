@@ -1,6 +1,6 @@
 ---
 title: OAuth 2.0 with Managed Identities
-date: 2022-02-10 00:00:00 +0000
+date: 2022-03-23 00:00:00 +0000
 description: Using Managed Identities to access an OAuth 2.0 protected application is a best practice for an application to application communication or, as referred to in the OAuth 2.0 terminology - Client Credentials Grant Flow. This article will show you how to configure your application in Azure AD and use Managed Identity to access the application.
 categories: [Security]
 tags: [OAuth2]
