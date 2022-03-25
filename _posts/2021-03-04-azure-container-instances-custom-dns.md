@@ -16,7 +16,7 @@ You can deploy Linux containers into an Azure virtual network, which will make t
 
 To specify your custom DNS servers, you need to use YAML file for the deployments. The following is an example of the content of such a file:
 ```yaml
-apiVersion: '2019-12-01'
+apiVersion: '2021-07-01'
 location: westeurope
 name: customdns
 properties:
@@ -36,20 +36,27 @@ properties:
       - port: 80
   dnsConfig:
     nameServers:
-      - 10.10.10.10
-        10.10.10.11
+      - <YOUR DNS SERVER>
+      - <YOUR DNS SERVER>
+  subnetIds: # Subnet to deploy the container group into
+    - id: <RESOURCE ID OF YOUR SUBNET - in a format /subscriptions/<subscription_id>/resourceGroups/<resource_group_name>/providers/Microsoft.Network/virtualNetworks/<virtual_network_name>/subnets/<subnet_name>>
+      name: <SUBNET NAME>
   ipAddress:
     type: Private
     ports:
     - protocol: tcp
       port: '80'
-  osType: Linux
-  networkProfile:
-    id: /subscriptions/<subscription_id>/resourceGroups/<resource_group>/providers/Microsoft.Network/networkProfiles/<name_of the_profile>
+  osType: Linux  
 type: Microsoft.ContainerInstance/containerGroups
 ```
-When you execute the "az container create" command to deploy a container group to a subnet, a [network profile](https://docs.microsoft.com/en-us/azure/container-instances/container-instances-virtual-network-concepts#network-profile) is created for you. To find out the id of your network profile, use the following command:
+You then create a Container Instance using the yaml file:
+
 ```bash
-az network profile list --resource-group <resource_group_name> \
-  --query [0].id --output tsv
+az container create -g <RESOURCE GROUP NAME> -f containerGroup.yml
+```
+
+To verify the DNS configuration, connect to the console of your container, and check the content of the _/etc/resolv.conf_ file:
+
+```bash
+cat /etc/resolv.conf 
 ```
