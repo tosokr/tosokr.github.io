@@ -10,6 +10,7 @@ header:
 permalink: /container-apps/deep-dive-overview-and-networking/
 excerpt: Azure Container Apps is a serverless offering you can use to host your containers. It is a good fit for containerized apps and hosting microservices. Integrated services like KEDA, Envoy proxy, and Dapr provide you with out-of-the-box auto-scaling, ingress, traffic splitting, and simplified microservice connectivity. Container Apps service is built on top of Kubernetes.
 ---
+[Deep dive into Azure Container Apps - Operating, security, reliability and pricing]({% post_url 2022-08-28-container-apps-operating-security-reliability-pricing %})
 
 # Overview
 [Azure Container Apps](https://docs.microsoft.com/en-us/azure/container-apps/overview) is a serverless offering you can use to host your containers. It is a good fit for containerized apps and hosting microservices. Integrated services like KEDA, Envoy proxy, and Dapr provide you with out-of-the-box auto-scaling, ingress, traffic splitting, and simplified microservice connectivity.
