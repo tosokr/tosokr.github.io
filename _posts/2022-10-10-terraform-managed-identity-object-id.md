@@ -6,8 +6,8 @@ categories: [Security]
 tags: [Managed Identity, Terraform]
 toc: false
 header:
- teaser: "/assets/img/posts/teasers/vm.jpg"
-permalink: /security/managed-identity-vm-objectid-terraform/
+ teaser: "/assets/img/posts/teasers/vm.png"
+permalink: /security/system-assigned-managed-identity-vm-objectid-terraform/
 excerpt: To get the Object Id of the VM's System Assigned Managed Identity, you need to call the Azure Instance Metadata Service (IMDS) endpoint and use the provided attributes to get the required information. It is more challenging when you want to achieve the same thing with Terraform.  
 ---
 
