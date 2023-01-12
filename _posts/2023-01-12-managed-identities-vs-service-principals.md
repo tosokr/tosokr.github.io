@@ -7,7 +7,7 @@ tags: [Managed Identity]
 toc: true
 header:
  teaser: "/assets/img/posts/teasers/managedIdentities.png"
-permalink: /security/managed-identities-vs-service-pricipals/
+permalink: /security/managed-identities-vs-service-principals/
 excerpt: Managed Identities eliminate the need for users to manage credentials by providing an identity for the Azure resource in Azure AD and using it to obtain Azure Active Directory (Azure AD) tokens. In scenarios when Managed Identies are not supported, you must use service principals. When to use what?  
 ---
 
